@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+int Vp, Vf;
+
+double gipotenuza(double x, double y)
+{
+    return sqrt((x * x) + (y * y));
+}
+
+double time(double lenp, double lenf)
+{
+    return (lenp / Vp) + (lenf / Vf);
+}
+
+int main()
+{
+    double a, mid1, mid2, left = 0, right = 1, cnst = 0.000000001;
+    cin >> Vp >> Vf >> a;
+
+    while (right - left > cnst)
+    {
+        mid1 = left + (right - left) / 3;
+        mid2 = right - (right - left) / 3;
+        if (time(gipotenuza(mid1, 1 - a), gipotenuza(1 - mid1, a)) < time(gipotenuza(mid2, 1 - a), gipotenuza(1 - mid2, a))) right = mid2;
+        else left = mid1;
+    }
+    cout << setprecision(8) << left << endl;
+}
