@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+
+void increas(int mas[], int n, int i)
+{
+    // Нахождение наибольшего элемента среди корневых, левых дочерних и правых дочерних элементов
+    int large = i;
+    int min = 2 * i + 1;
+    int max = 2 * i + 2;
+
+    if (min < n and mas[min] > mas[large])
+        large = min;
+
+    if ( max < n and mas[max] >(mas[large]) )
+        large = max;
+
+    // Меняем местами и, если корневой не является самым большим
+    if (large != i)
+    {
+        swap(mas[i], mas[large]);
+        increas(mas, n, large);
+    }
+}
+
+// Основная функция для сортировки кучи
+void sort(int mas[], int n)
+{
+    // Построение максимальной кучи                  
+    for (int i = n / 2 - 1; i >= 0; i--)
+        increas(mas, n, i);
+
+    // Сортировка кучи
+    for (int i = n - 1; i >= 0; i--)
+    {
+        swap(mas[0], mas[i]);
+
+        // Увеличьте корневой элемент, чтобы снова получить самый высокий элемент в корне
+        increas(mas, i, 0);
+    }
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int* mas = new int[n];
+    for (int i = 0; i < n; ++i) cin >> mas[i];
+
+    sort(mas, n);
+   
+    for (int i = 0; i < n; ++i) cout << mas[i] << " ";
+}
