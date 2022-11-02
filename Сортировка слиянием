@@ -1,0 +1,86 @@
+#include <iostream>
+
+using namespace std;
+
+// Объединяем два отсортированных подмассива `arr[low…mid]` и `arr[mid+1…high]`
+void Merge(int arr[], int aux[], int low, int mid, int high)
+{
+    int k = low, i = low, j = mid + 1;
+
+    // Пока есть элементы в левом и правом прогонах
+    while (i <= mid && j <= high)
+    {
+        if (arr[i] <= arr[j]) {
+            aux[k++] = arr[i++];
+        }
+        else {
+            aux[k++] = arr[j++];
+        }
+    }
+
+    // Копируем оставшиеся элементы
+    while (i <= mid) {
+        aux[k++] = arr[i++];
+    }
+
+    // Вторую половину копировать не нужно (поскольку остальные элементы
+    // уже находятся на своем правильном месте во вспомогательном массиве)
+
+    // копируем обратно в исходный массив, чтобы отразить порядок сортировки
+    for (int i = low; i <= high; i++) {
+        arr[i] = aux[i];
+    }
+}
+
+// Сортируем массив `arr[low…high]`, используя вспомогательный массив `aux`
+void mergesort(int arr[], int aux[], int low, int high)
+{
+    // Базовый вариант
+    if (high == low) {        // если размер прогона == 1
+        return;
+    }
+
+    // найти середину
+    int mid = (low + ((high - low) >> 1));
+
+    // рекурсивное разделение выполняется на две половины до тех пор, пока размер выполнения не станет == 1,
+    // затем объединяем их и возвращаемся вверх по цепочке вызовов
+
+    mergesort(arr, aux, low, mid);          // разделить/объединить левую половину
+    mergesort(arr, aux, mid + 1, high);     // разделить/объединить правую половину
+
+    Merge(arr, aux, low, mid, high);        // объединить два полупрогона.
+}
+
+// Функция для проверки, отсортирован ли arr в порядке возрастания или нет
+int isSorted(int arr[], int n)
+{
+    int prev = arr[0];
+
+    for (int i = 1; i < n; i++)
+    {
+        prev = arr[i];
+    }
+
+    return 1;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int* arr = new int[n];
+    int* aux = new int[n];
+
+    for (int i = 0; i < n; i++) cin >> arr[i];
+    
+    for (int i = 0; i < n; i++) aux[i] = arr[i];
+
+    // сортируем массив `arr`, используя вспомогательный массив `aux`
+    mergesort(arr, aux, 0, n - 1);
+
+    if (isSorted(arr, n))
+    {
+        for (int i = 0; i < n; i++) cout << arr[i] << " ";
+    }
+}
