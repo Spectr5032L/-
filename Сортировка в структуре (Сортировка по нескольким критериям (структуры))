@@ -1,0 +1,50 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct total {
+    int task; // кол-во выполненых задач у команды
+    int time; // кол-во штрафного времени у команды
+    int team; // команда
+};
+
+// Функция вернет 1, если задача2 < задача1, иначе 0
+bool compare(const total& person1, const total& person2)
+{
+    if (person2.task < person1.task)
+        return 1;
+    if (person2.task == person1.task)
+    {
+        if (person2.time > person1.time)
+            return 1;
+        if (person2.time == person1.time)
+        {
+            if (person2.team > person1.team)
+                return 1;
+        }
+    }
+    return 0;
+}
+int main()
+{
+    int len;
+    cin >> len;
+
+    total* arr = new total[len]; // Создание массива в структуре
+
+    for (int i = 0; i < len; i++)
+    {
+        int t, w, s; 
+        t = i + 1;
+        cin >> w;
+        cin >> s;
+        arr[i] = { w, s, t }; // Заполнение массива значениями для структуры
+    }
+
+    // Вызов функции sort() с пользовательской функцией сравнения 'compare'
+    sort(arr, arr + len, compare); // Сортируем с первого по последний элемент массива и последний подаваемый аргумент используем в качетсве компаратора
+
+    cout << endl;
+    for (int i = 0; i < len; i++) cout << arr[i].team << " ";
+    
+}
