@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+
+void DFS(int** mat, bool* ver, int n, int m)
+{
+    for (int i = 1; i <= n; i++)
+        if (mat[m][i] != 0 and !ver[i])
+        {
+            cout << i << " ";
+            ver[i] = true;
+            DFS(mat, ver, n, i);
+        }
+}
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+
+    bool* ver = new bool[n + 1] {0};
+    ver[m] = true;
+    int** mat = new int* [n + 1];
+
+    for (int i = 1; i <= n; i++) mat[i] = new int[n + 1];
+    for (int i = 1; i <= n; i++) for (int j = 1; j <= n; j++) cin >> mat[i][j];
+
+    cout << m << " ";
+    DFS(mat, ver, n, m);
+}
