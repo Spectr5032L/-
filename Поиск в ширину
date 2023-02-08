@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <list>
+
+using namespace std;
+void BFS(int** mat, int n, int start, int end);
+
+int main()
+{
+    int n, start, end;
+    scanf_s("%d ", &n);
+
+    int** mat = new int* [n];
+    for (int i = 0; i < n; i++) mat[i] = new int[n];
+    for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) cin >> mat[i][j];
+
+    scanf_s("%d %d", &start, &end);
+
+    BFS(mat, n, start-1, end-1);
+}
+
+void BFS(int** mat, int n, int start, int end)
+{
+    vector <int> answer;
+    list <int> vertexes;
+    vertexes.push_back(start);
+
+    int* q = new int[n];
+    int* fl = new int[n];
+    for (int i = 0; i < n; i++) { fl[i] = 0; q[i] = 0; }
+
+    while (!vertexes.empty())
+    {
+        int k = vertexes.front(); vertexes.pop_front();
+        fl[k] = 1;
+
+        if (k == end)
+            for (int count = end;; count = q[count])
+            {
+                if (count == start)
+                {
+                    reverse(answer.begin(), answer.end());
+                    if (answer.size() == 0) cout << 0;
+                    else
+                    {
+                        printf("%d\n%d ", answer.size(), start + 1);
+                        for (int i : answer) printf("%d ", i);
+                    }
+                    exit(0);
+                }
+                answer.push_back(count + 1);
+            }
+
+        for (int i = 0; i < n; i++)
+            if (mat[k][i] != 0 and !fl[i] and find(vertexes.begin(), vertexes.end(), i) == vertexes.end())
+            {
+                q[i] = k;
+                vertexes.push_back(i);
+            }
+    }
+    cout << -1;
+}
